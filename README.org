@@ -1,3 +1,20 @@
 * Pirouette
 
 A (hopefully) small overabstracted oversimplified PHP framework that removes most* the PHP boilerplate such as dealing with superglobals and whatnot.
+
+** To Do:
+*** Controller [20%]
++ [X] Basic routing
++ [ ] Regex-support
++ [ ] get/post/put/delete methods
++ [ ] options method
++ [ ] user's means of implementing HTTP methods etc
+*** Model
++ [ ] ORM via [[https://www.redbeanphp.com/index.php][RedBeanPHP]]
+*** View
++ [ ] Templates via [[http://mustache.github.io][Mustache]]
+
+** Inspired by:
+
++ Sinatra
++ Camping
