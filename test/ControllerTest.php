@@ -4,7 +4,7 @@ require_once dirname(__FILE__) . "/../src/Controller.php";
 
 $cont = new Controller();
 $cont->get("/ControllerTest.php/post/{id}", function(array $opts) {
-    echo "Success! Id is " . $opts["id"];
+    return "<p>Success! Id is " . $opts["id"] . "</p>";
 });
 
 # TODO: find a workaround to avoid this method call.

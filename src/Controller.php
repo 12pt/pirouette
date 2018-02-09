@@ -64,7 +64,10 @@ class Controller {
                     # if the current path can have a generalised path applied to it:
                     if(isset($matches) && count($matches) > 0) {
                         # TODO: insert req,res here.
-                        $path_listener["callback"]($matches[0]); # TODO: sort out the fact its an array of arrays. probably unnecessary.
+                        $result = $path_listener["callback"]($matches[0]); # TODO: sort out the fact its an array of arrays. probably unnecessary.
+                        if($result) {
+                            echo($result);
+                        }
                     }
                 }
             }
