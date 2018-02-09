@@ -2,6 +2,8 @@
 
 A (hopefully) small overabstracted oversimplified PHP framework that removes most* the PHP boilerplate such as dealing with superglobals and whatnot.
 
+Currently in development, use at own risk.
+
 ** To Do:
 *** Controller [20%]
 + [X] Basic routing
@@ -18,3 +20,4 @@ A (hopefully) small overabstracted oversimplified PHP framework that removes mos
 
 + Sinatra
 + Camping
+  
