@@ -1,0 +1,3 @@
+* Pirouette
+
+A (hopefully) small overabstracted oversimplified PHP framework that removes most* the PHP boilerplate such as dealing with superglobals and whatnot.
