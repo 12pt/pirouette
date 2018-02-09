@@ -69,7 +69,7 @@ class Controller {
 
     /**
      * Handle the route before we leave. This ensures the user literally only
-     * needs to implement a get method and that's it, rather than calling a method like run() etc...
+     * needs to implement an API method and that's it, rather than calling a method like run() etc...
      * It might be a bit questionable though.
      */
     public function __destruct() {
@@ -80,7 +80,7 @@ class Controller {
      * To be called (hopefully automatically in the future) once the user has declared all their routes.
      */
     private function _commence() {
-        $this->route($_SERVER["REQUEST_METHOD"], $_SERVER["REQUEST_URI"]);
+        $this->route($_SERVER["REQUEST_METHOD"], strtok($_SERVER["REQUEST_URI"], "?"));
     }
 
     # user interface:
