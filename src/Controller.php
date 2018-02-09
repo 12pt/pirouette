@@ -10,13 +10,6 @@ class Controller {
     }
 
     /**
-     * To be called (hopefully automatically in the future) once the user has declared all their routes.
-     */
-    public function commence() {
-        $this->route($_SERVER["REQUEST_METHOD"], $_SERVER["REQUEST_URI"]);
-    }
-
-    /**
      * Given a supported HTTP verb, delegate a method to handle it, return the response from that method
      * to be passed back up.
      */
@@ -65,13 +58,29 @@ class Controller {
                     if(isset($matches) && count($matches) > 0) {
                         # TODO: insert req,res here.
                         $result = $path_listener["callback"]($matches[0]); # TODO: sort out the fact its an array of arrays. probably unnecessary.
-                        if($result) {
+                        if(isset($result)) {
                             echo($result);
                         }
                     }
                 }
             }
         }
+    }
+
+    /**
+     * Handle the route before we leave. This ensures the user literally only
+     * needs to implement a get method and that's it, rather than calling a method like run() etc...
+     * It might be a bit questionable though.
+     */
+    public function __destruct() {
+        $this->_commence();
+    }
+
+    /**
+     * To be called (hopefully automatically in the future) once the user has declared all their routes.
+     */
+    private function _commence() {
+        $this->route($_SERVER["REQUEST_METHOD"], $_SERVER["REQUEST_URI"]);
     }
 
     # user interface:

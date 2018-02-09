@@ -7,7 +7,5 @@ $cont->get("/ControllerTest.php/post/{id}", function(array $opts) {
     return "<p>Success! Id is " . $opts["id"] . "</p>";
 });
 
-# TODO: find a workaround to avoid this method call.
-$cont->commence();
 ?>
 
