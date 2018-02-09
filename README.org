@@ -5,12 +5,16 @@ A (hopefully) small overabstracted oversimplified PHP framework that removes mos
 Currently in development, use at own risk.
 
 ** To Do:
-*** Controller [60%]
+*** Controller [42%]
 + [X] Basic routing
 + [ ] Regex-support
 + [X] get/post/put/delete methods
 + [ ] options method
 + [X] user's means of implementing HTTP methods etc
++ [ ] request and response objects in HTTP methods
++ [ ] helper functions [0/2]
+  - [ ] user agent
+  - [ ] ip locale
 *** Model
 + [ ] ORM via [[https://www.redbeanphp.com/index.php][RedBeanPHP]]
 *** View

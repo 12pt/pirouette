@@ -46,7 +46,9 @@ class Controller {
         if(!isset($this->paths[$path])) {
             $this->paths[$path] = [];
         }
-        array_push($this->paths[$path], array("path" => new Path($path), "method" => $method, "callback" => $callback));
+        array_push($this->paths[$path], array("path" => new Path($path), # the generalised path for this fn
+                                              "method" => $method, # the HTTP verb we want to associate this fn with
+                                              "callback" => $callback)); # the fn to call
     }
 
     /**
@@ -56,9 +58,12 @@ class Controller {
     public function router(string $path, string $method) {
         foreach($this->paths as $p) {
             foreach($p as $path_listener) {
+                # perform no extra logic if this request is a different HTTP verb
                 if($path_listener["method"] == $method) {
                     $matches = $path_listener["path"]->matchPath($path);
+                    # if the current path can have a generalised path applied to it:
                     if(isset($matches) && count($matches) > 0) {
+                        # TODO: insert req,res here.
                         $path_listener["callback"]($matches[0]); # TODO: sort out the fact its an array of arrays. probably unnecessary.
                     }
                 }
