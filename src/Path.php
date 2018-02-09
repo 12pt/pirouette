@@ -1,22 +1,22 @@
 <?php declare(strict_types=1);
 
-final class Url {
-    private $url;
+final class Path {
+    private $path;
 
     /**
-     * Initialise the URL object.
-     * @param string $targetUrl the url (+ optional placeholders) to match actual urls against
+     * Initialise the Path object.
+     * @param string $targetPath the path (+ optional placeholders) to match actual paths against
      */
-    public function __construct(string $targetUrl) {
-        $parser = new UrlParser();
-        $this->url = [];
-        # url can contain regular ol' words
-        # [NYI] url can contain regex 
-        # url can contain placeholders e.g. {id}
+    public function __construct(string $targetPath) {
+        $parser = new PathParser();
+        $this->path = [];
+        # path can contain regular ol' words
+        # [NYI] path can contain regex 
+        # path can contain placeholders e.g. {id}
 
-        $path = Url::explodeTrim($targetUrl);
+        $path = Path::explodeTrim($targetPath);
         foreach($path as $element) {
-            array_push($this->url, $parser->parseElement($element));
+            array_push($this->path, $parser->parseElement($element));
         }
     }
 
@@ -41,25 +41,25 @@ final class Url {
     }
 
     /**
-     * Match a given url e.g. /blog/post/34 to a template url /blog/post/{id}
+     * Match a given path e.g. /blog/post/34 to a template path /blog/post/{id}
      *
-     * @return an associative array binding ids to values if the url matches (or an empty array
+     * @return an associative array binding ids to values if the path matches (or an empty array
      * if it matches and no placeholders were used) or null if it didnt match.
      */
-    public function matchUrl(string $targetUrl) {
-        $path = Url::explodeTrim($targetUrl);
+    public function matchPath(string $targetPath) {
+        $path = Path::explodeTrim($targetPath);
         $boundPlaceholders = [];
 
         $numSegments = count($path);
-        $targetNum = count($this->url);
+        $targetNum = count($this->path);
 
         if($numSegments == $targetNum) {
             for($i=0; $i<$numSegments; $i++) {
 
-                if($this->url[$i]["type"] == "placeholder")  {
-                    array_push($boundPlaceholders, array($this->url[$i]["value"] => $path[$i]));
+                if($this->path[$i]["type"] == "placeholder")  {
+                    array_push($boundPlaceholders, array($this->path[$i]["value"] => $path[$i]));
                 } else {
-                    if($this->url[$i]["value"] != $path[$i]) {
+                    if($this->path[$i]["value"] != $path[$i]) {
                         # fail if ANY part is not right.
                         return null;
                     }

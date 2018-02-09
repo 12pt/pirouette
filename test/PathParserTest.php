@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-require_once dirname(__FILE__) . "/../src/UrlParser.php";
+require_once dirname(__FILE__) . "/../src/PathParser.php";
 
 use PHPUnit\Framework\TestCase;
 
-final class URLParserTest extends TestCase {
+final class PathParserTest extends TestCase {
     private $parser;
     
     public function setUp() {
-        $this->parser = new UrlParser();
+        $this->parser = new PathParser();
     }
 
     public function testBasicPlaceholderDetection() {

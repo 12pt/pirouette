@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-require_once dirname(__FILE__) . "/../src/Url.php";
+require_once dirname(__FILE__) . "/../src/Path.php";
 
 use PHPUnit\Framework\TestCase;
 
-final class UrlTest extends TestCase {
-    private $url;
+final class PathTest extends TestCase {
+    private $path;
 
     public function setUp() {
-        $this->url = new Url("/blog/post/{id}");
+        $this->path = new Path("/blog/post/{id}");
     }
 
     public function testRouteMatches() {
@@ -28,7 +28,7 @@ final class UrlTest extends TestCase {
         $results = [];
 
         foreach($tests as $test) {
-            $result = $this->url->matchUrl($test);
+            $result = $this->path->matchPath($test);
             array_push($results, $result);
         }
 
