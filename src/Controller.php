@@ -45,6 +45,30 @@ class Controller {
     }
 
     /**
+     * Supply the given array with all the useful details from the request in a key called _params.
+     *
+     * @param array $urlKeywords the array whose ["_params"] key should be populated
+     * @param string $method the HTTP method for this request, only used to test for PUT at the moment.
+     * @return $urlKeywords plus a populated ["_params"].
+     */
+    private function populateRequest(array $urlKeywords, string $method) {
+        if(isset($_GET) && count($_GET) > 0) {
+            array_push($urlKeywords, array("_params" => $_GET));
+        }
+        if(isset($_POST) && count($_POST) > 0) {
+            array_push($urlKeywords, array("_params" => $_POST));
+        }
+        if($method == "PUT") {
+            parse_str(file_get_contents("php://input"), $put);
+            if(isset($put) && count($put) > 0) {
+                array_push($urlKeywords, array("_params", $put));
+            }
+        }
+
+        return $urlKeywords;
+    }
+
+    /**
      * When a user tries to access a resource, try to find a generalised path that suits it.
      * For example, if $path is /blog/posts/345, try find a callback to call with the current HTTP verb who matches with or without placeholders.
      */
@@ -57,7 +81,11 @@ class Controller {
                     # if the current path can have a generalised path applied to it:
                     if(isset($matches) && count($matches) > 0) {
                         # TODO: insert req,res here.
-                        $result = $path_listener["callback"]($matches[0]); # TODO: sort out the fact its an array of arrays. probably unnecessary.
+                        $request = $this->populateRequest($matches[0], $method);
+
+                        $result = $path_listener["callback"]($request); # TODO: sort out the fact its an array of arrays. probably unnecessary.
+
+                        # if the user made the anonymous callback return something, echo it to the client.
                         if(isset($result)) {
                             echo($result);
                         }
