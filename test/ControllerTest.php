@@ -7,9 +7,9 @@ function printAssoc(array $arr, string $sep="<br>") {
 }
 
 $cont = new Controller();
-$cont->get("/ControllerTest.php/post/{id}", function(array $opts) {
-    $str = "<p>Success! Id is " . $opts["id"] . "</p>";
-    $str .= "<p>opts is <pre>" . printAssoc($opts) . "</pre></p>";
+$cont->get("/ControllerTest.php/post/{id}", function(array $req) {
+    $str = "<p>Success! Id is " . $req["id"] . "</p>";
+    $str .= "<p>req is <pre>" . printAssoc($req) . "</pre></p>";
     return $str;
 });
 
