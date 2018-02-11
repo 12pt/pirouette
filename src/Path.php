@@ -1,5 +1,7 @@
 <?php declare(strict_types=1);
 
+namespace Pirouette;
+
 require_once(__DIR__ . "/PathParser.php");
 
 final class Path {

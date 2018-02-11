@@ -2,5 +2,8 @@
     "name": "12pt/pirouette",
     "require-dev": {
         "phpunit/phpunit": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {"Pirouette\\": "src/"}
     }
 }

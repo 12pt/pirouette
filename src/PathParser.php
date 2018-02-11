@@ -1,5 +1,7 @@
 <?php declare(strict_types=1);
 
+namespace Pirouette;
+
 # split a /path/to/$key into its constituent parts and provide comparison routes.
 class PathParser {
     const OPEN_PLACEHOLDER = "{";
