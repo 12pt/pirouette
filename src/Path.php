@@ -59,7 +59,8 @@ final class Path {
             for($i=0; $i<$numSegments; $i++) {
 
                 if($this->path[$i]["type"] == "placeholder")  {
-                    array_push($boundPlaceholders, array($this->path[$i]["value"] => $path[$i]));
+                    # set boundPlaceHolders["id"] to $path[i]
+                    $boundPlaceholders[$this->path[$i]["value"]] = $path[$i];
                 } else {
                     if($this->path[$i]["value"] != $path[$i]) {
                         # fail if ANY part is not right.

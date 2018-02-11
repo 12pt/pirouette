@@ -13,5 +13,9 @@ $cont->get("/ControllerTest.php/post/{id}", function(array $req) {
     return $str;
 });
 
+$cont->post("/ControllerTest.php/post", function(array $req) {
+    return "printassoc: " . printAssoc($req, "\n") . "\n";
+});
+
 ?>
 

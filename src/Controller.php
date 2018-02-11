@@ -42,26 +42,48 @@ class Controller {
         array_push($this->paths[$path], array("path" => new Path($path), # the generalised path for this fn
                                               "method" => $method, # the HTTP verb we want to associate this fn with
                                               "callback" => $callback)); # the fn to call
+
+        error_log("added path $path via method $method.");
     }
 
     /**
      * Supply the given array with all the useful details from the request in a key called _params.
      *
      * @param array $urlKeywords the array whose ["_params"] key should be populated
-     * @param string $method the HTTP method for this request, only used to test for PUT at the moment.
+     * @param string $method the HTTP method for this request, only used to test for PUT & POST.
      * @return $urlKeywords plus a populated ["_params"].
      */
     private function populateRequest(array $urlKeywords, string $method) {
+        # obtain data from superglobals:
         if(isset($_GET) && count($_GET) > 0) {
             array_push($urlKeywords, array("_params" => $_GET));
         }
         if(isset($_POST) && count($_POST) > 0) {
             array_push($urlKeywords, array("_params" => $_POST));
         }
+        if(isset($_FILES) && count($_FILES) > 0) {
+            array_push($urlKeywords, array("_files" => $_FILES));
+        }
+
+        # obtain data from php://input
         if($method == "PUT") {
-            parse_str(file_get_contents("php://input"), $put);
-            if(isset($put) && count($put) > 0) {
-                array_push($urlKeywords, array("_params", $put));
+            try {
+                parse_str(file_get_contents("php://input"), $put);
+                if(isset($put) && count($put) > 0) {
+                    array_push($urlKeywords, array("_params", $put));
+                }
+            } catch(Exception $e) {
+                error_log("Error trying to read parameters from put request: " . $e->getMessage());
+            }
+        }
+        elseif($method == "POST") {
+            try {
+                $data = json_decode(file_get_contents("php://input"), true);
+                if(isset($data) && count($data) > 0) {
+                    array_push($urlKeywords, array("_json", $data));
+                }
+            } catch (Exception $e) {
+                error_log("Error trying to read json from php://input: " . $e->getMessage());
             }
         }
 
@@ -78,12 +100,11 @@ class Controller {
                 # perform no extra logic if this request is a different HTTP verb
                 if($path_listener["method"] == $method) {
                     $matches = $path_listener["path"]->matchPath($path);
-                    # if the current path can have a generalised path applied to it:
-                    if(isset($matches) && count($matches) > 0) {
-                        # TODO: insert req,res here.
-                        $request = $this->populateRequest($matches[0], $method);
 
-                        $result = $path_listener["callback"]($request); # TODO: sort out the fact its an array of arrays. probably unnecessary.
+                    # if the current path can have a generalised path applied to it:
+                    if(isset($matches)) {
+                        $request = $this->populateRequest($matches, $method);
+                        $result = $path_listener["callback"]($request);
 
                         # if the user made the anonymous callback return something, echo it to the client.
                         if(isset($result)) {

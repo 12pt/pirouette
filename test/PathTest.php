@@ -6,9 +6,23 @@ use PHPUnit\Framework\TestCase;
 
 final class PathTest extends TestCase {
     private $path;
+    private $pathNorm;
 
     public function setUp() {
         $this->path = new Path("/blog/post/{id}");
+        $this->pathNorm = new Path("/blog/404");
+    }
+
+    public function testNormalRoutes() {
+            
+        $test1 = "/blog/post";
+        $test2 = "/404";
+
+        $result1 = $this->pathNorm->matchPath($test1);
+        $result2 = $this->pathNorm->matchPath($test2);
+
+        $this->assertNotNull($result1);
+        $this->assertNotNull($result2);
     }
 
     public function testRouteMatches() {
