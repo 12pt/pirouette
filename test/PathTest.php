@@ -3,6 +3,7 @@
 require_once dirname(__FILE__) . "/../src/Path.php";
 
 use PHPUnit\Framework\TestCase;
+use Pirouette\Path;
 
 final class PathTest extends TestCase {
     private $path;

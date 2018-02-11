@@ -3,6 +3,7 @@
 require_once dirname(__FILE__) . "/../src/PathParser.php";
 
 use PHPUnit\Framework\TestCase;
+use Pirouette\PathParser;
 
 final class PathParserTest extends TestCase {
     private $parser;

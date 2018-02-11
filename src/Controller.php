@@ -58,13 +58,13 @@ class Controller {
     private function populateRequest(array $urlKeywords, string $method) {
         # obtain data from superglobals:
         if(isset($_GET) && count($_GET) > 0) {
-            array_push($urlKeywords, array("_params" => $_GET));
+            $urlKeywords["_params"] = $_GET;
         }
         if(isset($_POST) && count($_POST) > 0) {
-            array_push($urlKeywords, array("_params" => $_POST));
+            $urlKeywords["_params"] = $_POST;
         }
         if(isset($_FILES) && count($_FILES) > 0) {
-            array_push($urlKeywords, array("_files" => $_FILES));
+            $urlKeywords["_files"] = $_FILES;
         }
 
         # obtain data from php://input
@@ -72,7 +72,7 @@ class Controller {
             try {
                 parse_str(file_get_contents("php://input"), $put);
                 if(isset($put) && count($put) > 0) {
-                    array_push($urlKeywords, array("_params", $put));
+                    $urlKeywords["_params"] = $put;
                 }
             } catch(Exception $e) {
                 error_log("Error trying to read parameters from put request: " . $e->getMessage());
@@ -82,7 +82,7 @@ class Controller {
             try {
                 $data = json_decode(file_get_contents("php://input"), true);
                 if(isset($data) && count($data) > 0) {
-                    array_push($urlKeywords, array("_json", $data));
+                    $urlKeywords["_json"] = $data;
                 }
             } catch (Exception $e) {
                 error_log("Error trying to read json from php://input: " . $e->getMessage());
