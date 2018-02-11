@@ -80,7 +80,9 @@ class Controller {
      * To be called (hopefully automatically in the future) once the user has declared all their routes.
      */
     private function _commence() {
-        $this->route($_SERVER["REQUEST_METHOD"], strtok($_SERVER["REQUEST_URI"], "?"));
+        if(isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] != null && $_SERVER["REQUEST_URI"] != null) {
+            $this->route($_SERVER["REQUEST_METHOD"], strtok($_SERVER["REQUEST_URI"], "?"));
+        }
     }
 
     # user interface:
