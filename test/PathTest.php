@@ -13,18 +13,9 @@ final class PathTest extends TestCase {
         $this->pathNorm = new Path("/blog/404");
     }
 
-    public function testNormalRoutes() {
-            
-        $test1 = "/blog/post";
-        $test2 = "/404";
-
-        $result1 = $this->pathNorm->matchPath($test1);
-        $result2 = $this->pathNorm->matchPath($test2);
-
-        $this->assertNotNull($result1);
-        $this->assertNotNull($result2);
-    }
-
+    /**
+     * Test that the placeholder routes correctly match and provide placeholder=>value pairs.
+     */
     public function testRouteMatches() {
         $tests = [
             "/blog/post/23",
@@ -47,9 +38,9 @@ final class PathTest extends TestCase {
         }
 
         # first 3 should match
-        $this->assertArrayHasKey("id", $results[0][0]);
-        $this->assertArrayHasKey("id", $results[1][0]);
-        $this->assertArrayHasKey("id", $results[2][0]);
+        $this->assertArrayHasKey("id", $results[0]);
+        $this->assertArrayHasKey("id", $results[1]);
+        $this->assertArrayHasKey("id", $results[2]);
 
         # next 3 should NOT match the routes.
         $this->assertEmpty($results[3]);
@@ -57,7 +48,23 @@ final class PathTest extends TestCase {
         $this->assertEmpty($results[5]);
 
         # should match paths without preceeding /
-        $this->assertArrayHasKey("id", $results[6][0]);
-        $this->assertArrayHasKey("id", $results[7][0]);
+        $this->assertArrayHasKey("id", $results[6]);
+        $this->assertArrayHasKey("id", $results[7]);
+    }
+
+    /**
+     * Test that paths requiring placeholders that aren't given values return null.
+     */
+    public function testPlaceholderRoutesNoValues() {
+        $test1 = "/blog/post/5";
+        $test2 = "/blog/post/";
+
+        $r1 = $this->path->matchPath($test1);
+        $r2 = $this->path->matchPath($test2);
+
+        $this->assertNotNull($r1);
+        $this->assertArrayHasKey("id", $r1);
+
+        $this->assertNull($r2);
     }
 }

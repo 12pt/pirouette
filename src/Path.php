@@ -49,25 +49,27 @@ final class Path {
      * if it matches and no placeholders were used) or null if it didnt match.
      */
     public function matchPath(string $targetPath) {
-        $path = Path::explodeTrim($targetPath);
+        $query_path = Path::explodeTrim($targetPath);
         $boundPlaceholders = [];
 
-        $numSegments = count($path);
+        $numSegments = count($query_path);
         $targetNum = count($this->path);
 
         if($numSegments == $targetNum) {
             for($i=0; $i<$numSegments; $i++) {
-
-                if($this->path[$i]["type"] == "placeholder")  {
-                    # set boundPlaceHolders["id"] to $path[i]
-                    $boundPlaceholders[$this->path[$i]["value"]] = $path[$i];
-                } else {
-                    if($this->path[$i]["value"] != $path[$i]) {
-                        # fail if ANY part is not right.
+                if($this->path[$i]["type"] == "placeholder" && $query_path[$i] != '')  {
+                    $boundPlaceholders[$this->path[$i]["value"]] = $query_path[$i];
+                }
+                else {
+                    # fail if ANY non-placeholder part is not the same.
+                    if($this->path[$i]["value"] != $query_path[$i]) {
                         return null;
                     }
                 }
             }
+        }
+        else {
+            return null;
         }
 
         return $boundPlaceholders;
