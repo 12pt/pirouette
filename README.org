@@ -16,7 +16,9 @@ Currently in development, use at own risk.
   - [ ] user agent
   - [ ] ip locale
 *** Model
-+ [ ] ORM via [[https://www.redbeanphp.com/index.php][RedBeanPHP]]
++ Support [0/2]
+  - [ ] d (our own minimal ORM-type deal)
+  - [ ] ORM via [[https://www.redbeanphp.com/index.php][RedBeanPHP]]
 *** View
 + [ ] Templates via [[http://mustache.github.io][Mustache]]
 
