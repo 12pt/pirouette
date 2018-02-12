@@ -1,2 +1,4 @@
 vendor/
+.old/
+
 /.ac-php-conf.json

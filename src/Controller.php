@@ -44,8 +44,6 @@ class Controller {
         array_push($this->paths[$path], array("path" => new Path($path), # the generalised path for this fn
                                               "method" => $method, # the HTTP verb we want to associate this fn with
                                               "callback" => $callback)); # the fn to call
-
-        error_log("added path $path via method $method.");
     }
 
     /**
