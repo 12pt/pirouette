@@ -14,6 +14,9 @@ class Controller {
     /**
      * Given a supported HTTP verb, delegate a method to handle it, return the response from that method
      * to be passed back up.
+     *
+     * @param string $method the HTTP verb
+     * @param string $path the path e.g. /api/post/34
      */
     private function route(string $method, string $path) {
         switch($method) {
@@ -93,6 +96,9 @@ class Controller {
     /**
      * When a user tries to access a resource, try to find a generalised path that suits it.
      * For example, if $path is /blog/posts/345, try find a callback to call with the current HTTP verb who matches with or without placeholders.
+     *
+     * @param string $path the path e.g. /blog/posts/534
+     * @param string $method the HTTP verb e.g. GET, POST, PUT, or DELETE.
      */
     public function router(string $path, string $method) {
         foreach($this->paths as $p) {
