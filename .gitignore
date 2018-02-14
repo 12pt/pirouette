@@ -1,4 +1,5 @@
 vendor/
 .old/
+test_app/
 
 /.ac-php-conf.json
