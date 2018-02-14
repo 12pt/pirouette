@@ -10,7 +10,6 @@ final class ControllerTest extends TestCase {
 
     public function setUp() {
         $this->_cont = new Controller();
-
     }
 
     public function testGet() {
@@ -55,3 +54,4 @@ final class ControllerTest extends TestCase {
 }
 
 ?>
+

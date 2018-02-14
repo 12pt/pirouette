@@ -7,16 +7,32 @@ require_once(__DIR__ . "/Path.php");
 class Controller {
     private $paths;
 
+    /**
+     * Initialise the paths variable where we store ALL the routes, along with
+     * the related HTTP verb that executes a callback function also stored here.
+     */
     public function __construct() {
         $this->paths = [];
     }
 
     /**
+     * Called automatically once the user has declared all their routes, this "kicks off" the
+     * routing.
+     */
+    private function _commence() {
+        if(isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] != null && $_SERVER["REQUEST_URI"] != null) {
+            $this->route($_SERVER["REQUEST_METHOD"], strtok($_SERVER["REQUEST_URI"], "?"));
+        }
+    }
+
+    /**
      * Given a supported HTTP verb, delegate a method to handle it, return the response from that method
-     * to be passed back up.
+     * to be passed back up. This acts as a filter for unsupported HTTP verbs (currently OPTIONS).
      *
      * @param string $method the HTTP verb
-     * @param string $path the path e.g. /api/post/34
+     * @param string $path   the path e.g. /api/post/34
+     *
+     * @return void
      */
     private function route(string $method, string $path) {
         switch($method) {
@@ -36,9 +52,11 @@ class Controller {
     /**
      * Add a route to be listened for.
      * 
-     * @param string $path the generalised path e.g. /blog/posts/{id}
-     * @param string $method the HTTP verb e.g. GET
+     * @param string   $path     the generalised path e.g. /blog/posts/{id}
+     * @param string   $method   the HTTP verb e.g. GET
      * @param callable $callback the function to call on completion. Should accept an associative array as parameter.
+     *
+     * @return void
      */
     private function _addListener(string $path, string $method, callable $callback) {
         if(!isset($this->paths[$path])) {
@@ -52,8 +70,9 @@ class Controller {
     /**
      * Supply the given array with all the useful details from the request in a key called _params.
      *
-     * @param array $urlKeywords the array whose ["_params"] key should be populated
-     * @param string $method the HTTP method for this request, only used to test for PUT & POST.
+     * @param array  $urlKeywords the array whose ["_params"] key should be populated
+     * @param string $method      the HTTP method for this request
+     *
      * @return $urlKeywords plus a populated ["_params"].
      */
     private function populateRequest(array $urlKeywords, string $method) {
@@ -95,10 +114,13 @@ class Controller {
 
     /**
      * When a user tries to access a resource, try to find a generalised path that suits it.
-     * For example, if $path is /blog/posts/345, try find a callback to call with the current HTTP verb who matches with or without placeholders.
+     * For example, if $path is /blog/posts/345, try find a callback to call with the current
+     * HTTP verb who matches with or without placeholders.
      *
-     * @param string $path the path e.g. /blog/posts/534
+     * @param string $path   the path e.g. /blog/posts/534
      * @param string $method the HTTP verb e.g. GET, POST, PUT, or DELETE.
+     *
+     * @return void
      */
     public function router(string $path, string $method) {
         foreach($this->paths as $p) {
@@ -132,26 +154,12 @@ class Controller {
     }
 
     /**
-     * To be called (hopefully automatically in the future) once the user has declared all their routes.
-     */
-    private function _commence() {
-        if(isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] != null && $_SERVER["REQUEST_URI"] != null) {
-            $this->route($_SERVER["REQUEST_METHOD"], strtok($_SERVER["REQUEST_URI"], "?"));
-        }
-    }
-
-    # user interface:
-    # get("/blog/posts/{id}", function(array("id" => 23)) {
-    #
-    # -- logic using $kvs["id"] and so on here.
-    #
-    # });
-
-    /**
      * Set up a route for GET requests.
      * 
-     * @param string $path the generalised path e.g. /blog/posts/{id}
+     * @param string   $path     the generalised path e.g. /blog/posts/{id}
      * @param callable $callback what to do on this path, should accept associative array as parameter.
+     *
+     * @return void
      */
     public function get(string $path, callable $callback) {
         $this->_addListener($path, "GET", $callback);
@@ -160,8 +168,10 @@ class Controller {
     /**
      * Set up a route for POST requests.
      * 
-     * @param string $path the generalised path e.g. /blog/posts/{id}
+     * @param string   $path the generalised path e.g. /blog/posts/{id}
      * @param callable $callback what to do on this path, should accept associative array as parameter.
+     *
+     * @return void
      */
     public function post(string $path, callable $callback) {
         $this->_addListener($path, "POST", $callback);
@@ -170,8 +180,10 @@ class Controller {
     /**
      * Set up a route for PUT requests.
      * 
-     * @param string $path the generalised path e.g. /blog/posts/{id}
+     * @param string   $path the generalised path e.g. /blog/posts/{id}
      * @param callable $callback what to do on this path, should accept associative array as parameter.
+     *
+     * @return void
      */
     public function put(string $path, callable $callback) {
         $this->_addListener($path, "PUT", $callback);
@@ -180,8 +192,10 @@ class Controller {
     /**
      * Set up a route for DELETE requests.
      * 
-     * @param string $path the generalised path e.g. /blog/posts/{id}
+     * @param string   $path the generalised path e.g. /blog/posts/{id}
      * @param callable $callback what to do on this path, should accept associative array as parameter.
+     *
+     * @return void
      */
     public function delete(string $path, callable $callback) {
         $this->_addListener($path, "DELETE", $callback);
